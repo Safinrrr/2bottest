@@ -5,7 +5,7 @@ import os
 
 API_TOKEN = os.getenv('API_TOKEN')
 
-WEBHOOK_HOST = 'https://YOUR_DOMAIN'
+WEBHOOK_HOST = 'bottestq-f224cf-219af2-46-8-230-125.traefik.me'
 WEBHOOK_PATH = '/webhook/' + API_TOKEN
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
