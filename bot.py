@@ -1,8 +1,16 @@
 from aiogram import Bot, Dispatcher, types
-from aiogram.utils import executor
+from aiogram.utils.executor import start_webhook
 import logging
+import os
 
-API_TOKEN = '7354136013:AAEmvylGHcdVc0FVVa7fBvuV62d5f0qyRto'
+API_TOKEN = os.getenv('API_TOKEN')
+
+WEBHOOK_HOST = 'https://YOUR_DOMAIN'
+WEBHOOK_PATH = '/webhook/' + API_TOKEN
+WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
+
+WEBAPP_HOST = '0.0.0.0'
+WEBAPP_PORT = int(os.getenv('PORT', 3000))
 
 logging.basicConfig(level=logging.INFO)
 
@@ -15,6 +23,18 @@ dp = Dispatcher(bot)
 @dp.message_handler()asyncdefecho(message: types.Message):
     await message.answer(message.text)
 
+asyncdefon_startup(dp):
+    await bot.set_webhook(WEBHOOK_URL)
+
+asyncdefon_shutdown(dp):
+    await bot.delete_webhook()
+
 if __name__ == '__main__':
-    from aiogram import executor
-    executor.start_polling(dp, skip_updates=True)
+    start_webhook(
+        dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        on_startup=on_startup,
+        on_shutdown=on_shutdown,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
+    )
